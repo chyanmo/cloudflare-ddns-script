@@ -4,33 +4,35 @@
 
 中文 | [English](/README-EN.md)
 
-## 更新[Server酱支持版本](https://github.com/wherelse/Raspberrypi-IPV6-DDNS-Solution/tree/ServerPush) 
-
 ### 概述
+
+本脚本基于 wherelse 的 [cloudflare-ddns-script](https://github.com/wherelse/cloudflare-ddns-script) 修改而成。本脚本不再使用 Cloudflare Global API Key, 改用便于控制权限的 API Token，安全性更高
+
 本脚本是基于cloudflare API的DDNS脚本，支持IPV4和IPV6，可通过网络方式和本地方式获取脚本安装主机的IP地址，理论支持所有使用linux系统的主机，已在debian和ubuntu上测试可用。
 
 ### 使用脚本前需要做的
 1. 一台可联网的liunx设备
 2. 拥有一个域名，免费的或者收费的都可以（中国大陆的域名需要备案）
 3. 注册一个CloudFlare账户 ( www.cloudflare.com ), 并将需要使用的域名添加到账户上，完成配置后根据需要添加服务设备的IPV6地址添加一个AAAA解析，并设为仅进行DNS解析
-4. 查询CloudFlare账户的Globel API Key并记录下来，用于后续配置
+4. 配置好 Cloudflare API 令牌 (token)，需要有对应域名的 DNS 编辑权限
 
 ### 使用方法
 打开命令窗口，执行以下程序：
 ```shell
-wget https://raw.githubusercontent.com/wherelse/cloudflare-ddns-script/master/cloudflare-ddns.sh
+wget https://raw.githubusercontent.com/chyanmo/cloudflare-ddns-script/master/cloudflare-ddns.sh
 sudo chmod +x /home/username/cloudflare-ddns.sh #目录根据实际用户等进行更改
 ```
 需要对脚本内的个人配置信息进行更改，目录和上一条命令保持一致
 ```shell
-sudo nano /home/username/cloudflare-ddns.sh
-#或
-sudo vi /home/username/cloudflare-ddns.sh
+nano ./cloudflare-ddns.sh
+```
+或
+```shell
+vi ./cloudflare-ddns.sh
 ```
 找到如下内容进行更改
 ```shell
-auth_email="xxxxxxx@xxxx.com"  #你的CloudFlare注册账户邮箱
-auth_key="*****************"   #你的cloudflare账户Globel ID 
+auth_key="******"   #你的 Cloudflare API 令牌 (token)，需要有对应域名的 DNS 编辑权限
 zone_name="Your main Domain"   #你的域名
 record_name="Your Full Domain" #完整域名
 

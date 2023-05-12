@@ -1,8 +1,7 @@
 #!/bin/bash
 
 # CHANGE THESE
-auth_email="xxxxxxx@xxxx.com"  #你的CloudFlare注册账户邮箱,your cloudflare account email address
-auth_key="*****************"   #你的cloudflare账户Globel ID ,your cloudflare Globel ID
+api_token="******"   #你的 Cloudflare API 令牌，需要有对应域名的 DNS 编辑 权限
 zone_name="Your main Domain"   #你的域名,your root domain address
 record_name="Your Full Domain" #完整域名,your full domain address
 record_type="AAAA"             #A or AAAA,ipv4 或 ipv6解析
@@ -71,12 +70,10 @@ if [ -f $id_file ] && [ $(wc -l $id_file | cut -d " " -f 1) == 2 ]; then
     record_identifier=$(tail -1 $id_file)
 else
     zone_identifier=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones?name=$zone_name" \
-        -H "X-Auth-Email: $auth_email" \
-        -H "X-Auth-Key: $auth_key" \
+        -H "Authorization: Bearer $api_token" \
         -H "Content-Type: application/json" | grep -Po '(?<="id":")[^"]*' | head -1 )
     record_identifier=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones/$zone_identifier/dns_records?type=${record_type}&name=$record_name" \
-        -H "X-Auth-Email: $auth_email" \
-        -H "X-Auth-Key: $auth_key" \
+        -H "Authorization: Bearer $api_token" \
         -H "Content-Type: application/json"  | grep -Po '(?<="id":")[^"]*')
     echo "$zone_identifier" > $id_file
     echo "$record_identifier" >> $id_file
@@ -84,8 +81,7 @@ fi
 
 #更新DNS记录 update the dns
 update=$(curl -s -X PUT "https://api.cloudflare.com/client/v4/zones/$zone_identifier/dns_records/$record_identifier" \
-    -H "X-Auth-Email: $auth_email" \
-    -H "X-Auth-Key: $auth_key" \
+    -H "Authorization: Bearer $api_token" \
     -H "Content-Type: application/json" \
     --data "{\"type\":\"$record_type\",\"name\":\"$record_name\",\"content\":\"$ip\",\"ttl\":1,\"proxied\":false}")
 

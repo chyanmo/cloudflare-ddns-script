@@ -5,30 +5,34 @@
 English | [中文](/README.md)
 
 ### Overview
+
+This script is modified based on wherelse's [cloudflare-ddns-script](https://github.com/wherelse/cloudflare-ddns-script). Instead of using Cloudflare Global API Key, this script now uses an API Token that makes it easier to control permissions and provides higher security.
+
 This script is a DDNS script based on the cloudflare API, which supports IPV4 and IPV6. The IP address of the script installation host can be obtained through the network and local methods. Theoretically supports all hosts using the Linux system. It has been tested and available on debian and ubuntu.
 
 ### What to do before using a script
 1. A liunx device that can be connected to the Internet.
 2. Have a domain name.
 3. Register a CloudFlare account ( www.cloudflare.com ), add the domain to the account. After the configuration is complete, add an AAAA resolution to the IPV6 address of the service device as required, and set it to perform DNS resolution only.
-4. Query the Globe API Key of CloudFlare account and record it for subsequent configuration.
+4. You need to configure the Cloudflare API token and have DNS editing permission for the corresponding domain name
 
 ### Instructions
 Open a terminal window and execute the following procedure:
 ```shell
-wget https://raw.githubusercontent.com/wherelse/cloudflare-ddns-script/master/cloudflare-ddns.sh
+wget https://raw.githubusercontent.com/chyanmo/cloudflare-ddns-script/master/cloudflare-ddns.sh
 sudo chmod +x /home/username/cloudflare-ddns.sh #Directory changes based on actual users, you should change the username.
 ```
 The personal configuration information in the script needs to be changed, and the directory is consistent with the previous command
 ```shell
-sudo nano /home/username/cloudflare-ddns.sh
-#or
-sudo vi /home/username/cloudflare-ddns.sh
+nano ./cloudflare-ddns.sh
+```
+or
+```shell
+vi ./cloudflare-ddns.sh
 ```
 Find the following to make changes
 ```shell
-auth_email="xxxxxxx@xxxx.com"  #Your CloudFlare account email
-auth_key="*****************"   #Yout cloudflare account Globel ID 
+auth_key="******"   #Your Cloudflare API Token，which requires DNS editing permission for the corresponding domain name
 zone_name="Your main Domain"   #Your zone domain name
 record_name="Your Full Domain" #Your full record name 
 
