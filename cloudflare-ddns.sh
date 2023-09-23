@@ -18,11 +18,7 @@ if [ $record_type = "AAAA" ];then
     if [ $ip_index = "internet" ];then
         ip=$(curl -6 ip.sb)
     elif [ $ip_index = "local" ];then
-        if [ "$user" = "root" ];then
-            ip=$(ifconfig $eth_card | grep 'inet6'| grep -v '::1'|grep -v 'fe80' | cut -f2 | awk '{ print $2}' | head -1)
-        else
-            ip=$(/sbin/ifconfig $eth_card | grep 'inet6'| grep -v '::1'|grep -v 'fe80' | cut -f2 | awk '{ print $2}' | head -1)
-        fi
+        ip=$(ip addr show dev $eth_card | grep 'inet6' | grep -v ' ::1'| grep -v ' fe80' | awk '{print $2}' | awk -F/ '{print $1}' | head -n 1)
     else 
         echo "Error IP index, please input the right type"
         exit 0
@@ -31,11 +27,7 @@ elif [ $record_type = "A" ];then
     if [ $ip_index = "internet" ];then
         ip=$(curl -4 ip.sb)
     elif [ $ip_index = "local" ];then
-        if [ "$user" = "root" ];then
-            ip=$(ifconfig $eth_card | grep 'inet'| grep -v '127.0.0.1' | grep -v 'inet6'|cut -f2 | awk '{ print $2}')
-        else
-            ip=$(/sbin/ifconfig $eth_card | grep 'inet'| grep -v '127.0.0.1' | grep -v 'inet6'|cut -f2 | awk '{ print $2}')
-        fi
+        ip=$(ip addr show dev $eth_card | grep 'inet ' | grep -v '127.0.0.1' | awk '{print $2}' | awk -F/ '{print $1}' | head -n 1)
     else 
         echo "Error IP index, please input the right type"
         exit 0
